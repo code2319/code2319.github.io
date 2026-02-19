@@ -524,12 +524,15 @@
                 <div class="project-header">
                     <div>
                         <div class="project-id">PROJECT-003</div>
-                        <h2 class="project-title">GCP + Falco + Google ADK, Tetragon</h2>
+                        <h2 class="project-title">AI-Assisted Runtime Detection on GKE (Falco + ADK)</h2>
                     </div>
                     <span class="tlp-label tlp-clear">TLP:CLEAR</span>
                 </div>
                 <p class="project-description">
-                    Automated incident report generation from Kubernetes security alerts. Built a pipeline that captures these events, processes them through an AI agent, and outputs structured reports with attack context, threat classification, and recommended response steps. Reduces alert triage time by automatically translating technical data into actionable intelligence.
+                    - <b>Detection-as-Code (DaC):</b> Designed and deployed a runtime detection stack on GKE using Terraform, provisioning IAM, Pub/Sub, and Falco to enable reproducible cloud-native security monitoring.<br>
+                    - <b>AI-Assisted Triage Engine:</b> Built a Python-based incident enrichment service leveraging Google Agent Development Kit (ADK) and Gemini to transform raw Falco alerts into structured, MITRE-mapped incident reports with investigation guidance.<br>
+                    - <b>Event-Driven Telemetry Pipeline:</b> Architected a real-time Pub/Sub workflow to stream Kubernetes runtime alerts into an AI analysis service, enabling automated alert interpretation and contextual response recommendations.<br>
+                    - <b>Infrastructure-as-Code (IaC):</b> Implemented modular Terraform configurations to standardize security cluster deployments in GCP, enforcing least-privilege IAM roles and service account isolation.
                 </p>
                 <div class="project-tags">
                     <span class="tag">Terraform</span>
