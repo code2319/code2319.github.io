@@ -349,6 +349,72 @@
             letter-spacing: 0.1em;
         }
 
+        /* Show More Button */
+        .show-more-container {
+            text-align: center;
+            margin: 3rem 0 4rem 0;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards 1.2s;
+        }
+
+        .show-more-btn {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            color: var(--electric);
+            padding: 0.8rem 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .show-more-btn:hover {
+            background: rgba(26, 31, 58, 0.8);
+            border-color: var(--electric);
+            transform: translateY(-2px);
+        }
+
+        .show-more-btn::after {
+            content: '▼';
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .show-more-btn.expanded::after {
+            transform: rotate(180deg);
+        }
+
+        /* Additional Projects Section */
+        .additional-projects {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .additional-projects.expanded {
+            max-height: 3000px;
+        }
+
+        .additional-projects .project-card {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: none;
+        }
+
+        .additional-projects.expanded .project-card {
+            animation: slideUp 0.5s ease forwards;
+        }
+
+        .additional-projects.expanded .project-card:nth-child(1) { animation-delay: 0.1s; }
+        .additional-projects.expanded .project-card:nth-child(2) { animation-delay: 0.2s; }
+        .additional-projects.expanded .project-card:nth-child(3) { animation-delay: 0.3s; }
+
         footer {
             text-align: center;
             padding: 3rem 0;
@@ -466,10 +532,10 @@
                 <span>SYSTEM ACTIVE</span>
             </div>
             <div class="status-item">
-                <span>3 PROJECTS INDEXED</span>
+                <span>0 PROJECTS INDEXED</span>
             </div>
             <div class="status-item">
-                <span>LAST UPDATE: 2026.02.16</span>
+                <span>LAST UPDATE: 2024.02.16</span>
             </div>
         </div>
 
@@ -481,8 +547,8 @@
             <article class="project-card">
                 <div class="project-header">
                     <div>
-                        <div class="project-id">PROJECT-001</div>
-                        <h2 class="project-title">MCP Server for Detection Engineering</h2>
+                        <div class="project-id"></div>
+                        <h2 class="project-title">MCP Server for Detection Engineering (Security & Anti-Fraud)</h2>
                     </div>
                     <span class="tlp-label tlp-amber">TLP:AMBER</span>
                 </div>
@@ -515,7 +581,7 @@
                     <span class="tag">Anti Fraud</span>
                 </div>
                 <div class="project-footer">
-                    <a href="#" class="project-link">Details</a>
+                    <a href="projects/ml-classifier-hunting-down-bot-email-addresses.html" class="project-link" target="_blank">Details</a>
                     <span class="project-date">2025.11</span>
                 </div>
             </article>
@@ -523,7 +589,7 @@
             <article class="project-card">
                 <div class="project-header">
                     <div>
-                        <div class="project-id">PROJECT-003</div>
+                        <div class="project-id"></div>
                         <h2 class="project-title">AI-Assisted Runtime Detection on GKE (Falco + ADK)</h2>
                     </div>
                     <span class="tlp-label tlp-clear">TLP:CLEAR</span>
@@ -549,6 +615,22 @@
 
         </div>
 
+        <!-- Show More Button -->
+        <div class="show-more-container">
+            <button class="show-more-btn" id="showMoreBtn" onclick="toggleProjects()">
+                Show More Projects (0)
+            </button>
+        </div>
+
+        <!-- Additional Projects (Hidden by default) -->
+        <div class="additional-projects" id="additionalProjects">
+            <div class="projects-grid">
+                <!-- Add more projects here when you have them -->
+                <!-- Example: Copy a project-card from above and paste here -->
+                
+            </div>
+        </div>
+
         <footer>
             <p>// SECURE COMMUNICATIONS ONLY</p>
             <div class="contact-links">
@@ -557,5 +639,92 @@
             </div>
         </footer>
     </div>
+    
+    <script>
+    // Auto-count projects and update status bar on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Script loaded'); // Debug
+        
+        // Count main projects (only the first projects-grid, not the one inside additionalProjects)
+        const mainProjectsGrid = document.querySelector('.projects-grid');
+        const mainProjects = mainProjectsGrid.querySelectorAll('.project-card');
+        console.log('Main projects found:', mainProjects.length); // Debug
+        
+        // Count additional (hidden) projects
+        const additionalProjects = document.querySelectorAll('#additionalProjects .project-card');
+        console.log('Additional projects found:', additionalProjects.length); // Debug
+        
+        // Total projects
+        const totalProjects = mainProjects.length + additionalProjects.length;
+        console.log('Total projects:', totalProjects); // Debug
+        
+        // Update status bar with total count
+        const statusItems = document.querySelectorAll('.status-item');
+        console.log('Status items found:', statusItems.length); // Debug
+        
+        if (statusItems.length >= 2) {
+            const countSpan = statusItems[1].querySelector('span');
+            console.log('Count span found:', countSpan); // Debug
+            if (countSpan) {
+                countSpan.textContent = `${totalProjects} PROJECTS INDEXED`;
+                console.log('Updated to:', countSpan.textContent); // Debug
+            }
+        }
+
+        // Auto-number all projects
+        const allProjectCards = document.querySelectorAll('.project-card');
+        allProjectCards.forEach((card, index) => {
+            const projectId = card.querySelector('.project-id');
+            if (projectId) {
+                const projectNumber = String(index + 1).padStart(3, '0');
+                projectId.textContent = `PROJECT-${projectNumber}`;
+            }
+        });
+        
+        // Update "Show More" button with additional project count
+        const showMoreBtn = document.getElementById('showMoreBtn');
+        if (additionalProjects.length > 0) {
+            showMoreBtn.textContent = `Show More Projects (${additionalProjects.length})`;
+            showMoreBtn.style.display = 'inline-block';
+        } else {
+            showMoreBtn.style.display = 'none';
+        }
+        
+        // Get last update date from most recent project
+        const allProjectDates = document.querySelectorAll('.project-date');
+        let latestDate = '2024.01.01';
+        
+        allProjectDates.forEach(dateEl => {
+            const dateText = dateEl.textContent.trim();
+            if (dateText > latestDate) {
+                latestDate = dateText;
+            }
+        });
+        
+        // Update status bar with latest date
+        if (statusItems.length >= 3) {
+            const dateSpan = statusItems[2].querySelector('span');
+            if (dateSpan) {
+                dateSpan.textContent = `LAST UPDATE: ${latestDate}`;
+            }
+        }
+    });
+    
+    function toggleProjects() {
+        const additionalProjects = document.getElementById('additionalProjects');
+        const btn = document.getElementById('showMoreBtn');
+        const additionalProjectCount = document.querySelectorAll('#additionalProjects .project-card').length;
+        
+        additionalProjects.classList.toggle('expanded');
+        btn.classList.toggle('expanded');
+        
+        if (additionalProjects.classList.contains('expanded')) {
+            btn.textContent = 'Show Less';
+        } else {
+            btn.textContent = `Show More Projects (${additionalProjectCount})`;
+        }
+    }
+    </script>
+
 </body>
 </html>
