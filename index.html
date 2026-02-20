@@ -80,7 +80,7 @@
 
         /* Terminal-style header */
         header {
-            margin-bottom: 4rem;
+            margin-bottom: 2rem;  /* Reduced from 4rem */
             opacity: 0;
             animation: glitchIn 0.6s ease forwards;
             position: relative;
@@ -131,15 +131,20 @@
             letter-spacing: 0.3em;
             text-transform: uppercase;
             font-weight: 400;
+            margin-bottom: 0;  /* Remove bottom margin from subtitle */
         }
 
         .status-bar {
             display: flex;
             gap: 2rem;
-            margin: 2rem 0 3rem 0;
+            margin: 0.5rem 0 2rem 0;  /* Reduced from 2rem/3rem to 0.5rem/2rem */
             font-size: 0.8rem;
             opacity: 0;
             animation: slideUp 0.6s ease forwards 0.5s;
+        }
+
+        .status-item span {
+            color: rgba(232, 244, 248, 0.8);  /* White/ice color instead of electric cyan */
         }
 
         .status-item {
@@ -184,6 +189,32 @@
             animation: slideUp 0.5s ease forwards;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
+        }
+
+        /* Hide extended content initially */
+        .project-extended {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .project-extended {
+            opacity: 1;
+            max-height: 200px;
+        }
+
+        .project-description {
+            line-height: 1.8; /* Increased from 1.7 */
+            margin-bottom: 2rem; /* More space before tags */
+            color: rgba(232, 244, 248, 0.85); /* Easier to read */
+            max-width: 65ch;
+        }
+
+        /* Make key phrases pop */
+        .project-description b {
+            color: var(--electric); /* Highlight important terms */
+            font-weight: 600;
         }
 
         .project-card:nth-child(1) { animation-delay: 0.8s; }
@@ -520,28 +551,21 @@
                 <span class="terminal-dot"></span>
                 <span class="terminal-dot"></span>
                 <span class="terminal-dot"></span>
-                <span>~/security-research/projects</span>
+                <span>~/projects</span>
             </div>
             <h1>ARCHIVE</h1>
-            <p class="subtitle">Security Engineering & Automation</p>
+            <p class="subtitle">Engineering solutions for operational security problems</p>
         </header>
 
+        <!-- <p class="intro">
+            Each project originated from a real operational need.
+        </p> -->
+
         <div class="status-bar">
-            <div class="status-item">
-                <span class="status-indicator"></span>
-                <span>SYSTEM ACTIVE</span>
-            </div>
-            <div class="status-item">
-                <span>0 PROJECTS INDEXED</span>
-            </div>
             <div class="status-item">
                 <span>LAST UPDATE: 2024.02.16</span>
             </div>
         </div>
-
-        <p class="intro">
-            Security automation, custom tooling, and various engineering approaches. Built to solve specific problems.
-        </p>
 
         <div class="projects-grid">
             <article class="project-card">
@@ -553,7 +577,7 @@
                     <span class="tlp-label tlp-amber">TLP:AMBER</span>
                 </div>
                 <p class="project-description">
-                    Security Detections Model Context Protocol (MCP) Server indexes public detection repositories (Sigma, Splunk ESCU, Elastic, KQL) and our local detections into a single, searchable corpus, performs MITRE ATT&CK gap analysis, and uses LLM-powered workflows to generate platform-specific detection queries, reusable templates, and prioritized remediation guidance.
+                    Detection-as-Code assistant indexing 4+ rule sources. On-demand MITRE-mapped detection suggestions, query generation, and coverage analysis across SIEM platforms.
                 </p>
                 <div class="project-tags">
                     <span class="tag">Detection Engineering</span>
@@ -574,7 +598,7 @@
                     <span class="tlp-label tlp-amber">TLP:AMBER</span>
                 </div>
                 <p class="project-description">
-                    Automated detection of bot-generated email addresses during account registration. Built a classifier using email structural patterns (character sequences, digit ratios, formatting quirks) to identify automated fake account creation. Achieved 92% accuracy in distinguishing bot emails from legitimate users, deployed as real-time scoring to flag suspicious registrations instantly.
+                    ML-based scoring engine identifying bot-driven account registrations via structural pattern analysis. 92% accuracy, deployed for real-time fraud reduction.
                 </p>
                 <div class="project-tags">
                     <span class="tag">Machine Learning</span>
@@ -595,10 +619,9 @@
                     <span class="tlp-label tlp-clear">TLP:CLEAR</span>
                 </div>
                 <p class="project-description">
-                    - <b>Detection-as-Code (DaC):</b> Designed and deployed a runtime detection stack on GKE using Terraform, provisioning IAM, Pub/Sub, and Falco to enable reproducible cloud-native security monitoring.<br>
-                    - <b>AI-Assisted Triage Engine:</b> Built a Python-based incident enrichment service leveraging Google Agent Development Kit (ADK) and Gemini to transform raw Falco alerts into structured, MITRE-mapped incident reports with investigation guidance.<br>
-                    - <b>Event-Driven Telemetry Pipeline:</b> Architected a real-time Pub/Sub workflow to stream Kubernetes runtime alerts into an AI analysis service, enabling automated alert interpretation and contextual response recommendations.<br>
-                    - <b>Infrastructure-as-Code (IaC):</b> Implemented modular Terraform configurations to standardize security cluster deployments in GCP, enforcing least-privilege IAM roles and service account isolation.
+                    <p class="project-description">
+                        Falco-based runtime detection stack converting syscall alerts into enriched, investigation-ready insights through AI-assisted analysis.
+                    </p>
                 </p>
                 <div class="project-tags">
                     <span class="tag">Terraform</span>
@@ -641,46 +664,7 @@
     </div>
     
     <script>
-    // Auto-count projects and update status bar on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('Script loaded'); // Debug
-        
-        // Count main projects (only the first projects-grid, not the one inside additionalProjects)
-        const mainProjectsGrid = document.querySelector('.projects-grid');
-        const mainProjects = mainProjectsGrid.querySelectorAll('.project-card');
-        console.log('Main projects found:', mainProjects.length); // Debug
-        
-        // Count additional (hidden) projects
-        const additionalProjects = document.querySelectorAll('#additionalProjects .project-card');
-        console.log('Additional projects found:', additionalProjects.length); // Debug
-        
-        // Total projects
-        const totalProjects = mainProjects.length + additionalProjects.length;
-        console.log('Total projects:', totalProjects); // Debug
-        
-        // Update status bar with total count
-        const statusItems = document.querySelectorAll('.status-item');
-        console.log('Status items found:', statusItems.length); // Debug
-        
-        if (statusItems.length >= 2) {
-            const countSpan = statusItems[1].querySelector('span');
-            console.log('Count span found:', countSpan); // Debug
-            if (countSpan) {
-                countSpan.textContent = `${totalProjects} PROJECTS INDEXED`;
-                console.log('Updated to:', countSpan.textContent); // Debug
-            }
-        }
-
-        // Auto-number all projects
-        const allProjectCards = document.querySelectorAll('.project-card');
-        allProjectCards.forEach((card, index) => {
-            const projectId = card.querySelector('.project-id');
-            if (projectId) {
-                const projectNumber = String(index + 1).padStart(3, '0');
-                projectId.textContent = `PROJECT-${projectNumber}`;
-            }
-        });
-        
+    document.addEventListener('DOMContentLoaded', function() {        
         // Update "Show More" button with additional project count
         const showMoreBtn = document.getElementById('showMoreBtn');
         if (additionalProjects.length > 0) {
@@ -701,15 +685,16 @@
             }
         });
         
-        // Update status bar with latest date
-        if (statusItems.length >= 3) {
-            const dateSpan = statusItems[2].querySelector('span');
+        // Update status bar with latest date (only 1 status-item now)
+        const statusItems = document.querySelectorAll('.status-item');
+        if (statusItems.length >= 1) {
+            const dateSpan = statusItems[0].querySelector('span');
             if (dateSpan) {
                 dateSpan.textContent = `LAST UPDATE: ${latestDate}`;
             }
         }
-    });
-    
+        });
+
     function toggleProjects() {
         const additionalProjects = document.getElementById('additionalProjects');
         const btn = document.getElementById('showMoreBtn');
