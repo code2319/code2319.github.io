@@ -173,22 +173,30 @@
             padding-left: 1.5rem;
         }
 
-        .projects-grid {
-            display: grid;
-            gap: 1.5rem;
-            margin-bottom: 4rem;
-        }
-
         .project-card {
             background: linear-gradient(135deg, rgba(26, 31, 58, 0.6) 0%, rgba(26, 31, 58, 0.3) 100%);
             border: 1px solid rgba(0, 217, 255, 0.2);
-            padding: 2rem;
+            padding: 1.5rem;  /* Reduced from 2rem */
             position: relative;
             overflow: hidden;
             opacity: 0;
             animation: slideUp 0.5s ease forwards;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
+        }
+
+        .projects-grid {
+            display: grid;
+            gap: 1rem;  /* Reduced from 1.5rem */
+            margin-bottom: 4rem;
+        }
+
+        .project-description {
+            line-height: 1.6; /* Reduced from 1.8 */
+            margin-bottom: 1.5rem; /* Reduced from 2rem */
+            color: rgba(232, 244, 248, 0.85);
+            max-width: 65ch;
+            font-size: 0.9rem; /* Slightly smaller text */
         }
 
         /* Hide extended content initially */
@@ -202,13 +210,6 @@
         .project-card:hover .project-extended {
             opacity: 1;
             max-height: 200px;
-        }
-
-        .project-description {
-            line-height: 1.8; /* Increased from 1.7 */
-            margin-bottom: 2rem; /* More space before tags */
-            color: rgba(232, 244, 248, 0.85); /* Easier to read */
-            max-width: 65ch;
         }
 
         /* Make key phrases pop */
@@ -572,7 +573,7 @@
                 <div class="project-header">
                     <div>
                         <div class="project-id"></div>
-                        <h2 class="project-title">MCP Server for Detection Engineering (Security & Anti-Fraud)</h2>
+                        <h2 class="project-title">Detection Engineering Assistant (MCP-Based)</h2>
                     </div>
                     <span class="tlp-label tlp-amber">TLP:AMBER</span>
                 </div>
@@ -593,7 +594,7 @@
                 <div class="project-header">
                     <div>
                         <div class="project-id"></div>
-                        <h2 class="project-title">ML Classifier: Hunting Down Bot Email Addresses</h2>
+                        <h2 class="project-title">ML-Based Registration Abuse Detection</h2>
                     </div>
                     <span class="tlp-label tlp-amber">TLP:AMBER</span>
                 </div>
@@ -614,7 +615,7 @@
                 <div class="project-header">
                     <div>
                         <div class="project-id"></div>
-                        <h2 class="project-title">AI-Assisted Runtime Detection on GKE (Falco + ADK)</h2>
+                        <h2 class="project-title">Syscall-Based Runtime Detection & AI Enrichment</h2>
                     </div>
                     <span class="tlp-label tlp-clear">TLP:CLEAR</span>
                 </div>
