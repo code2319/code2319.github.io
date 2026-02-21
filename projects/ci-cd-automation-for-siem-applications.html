@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CI/CD Automation for SIEM Applications - Project Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-blue: #0a0e27;
+            --slate: #1a1f3a;
+            --electric: #00d9ff;
+            --amber: #ffb627;
+            --ice: #e8f4f8;
+            --purple: #a78bfa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--deep-blue);
+            color: var(--ice);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(180deg, transparent 0%, var(--slate) 50%, transparent 100%);
+            background-size: 100% 200px;
+            animation: scan 8s linear infinite;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(0, 217, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(167, 139, 250, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .back-link {
+            color: var(--electric);
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .back-link:hover {
+            gap: 0.8rem;
+            color: var(--ice);
+        }
+
+        .back-link::before {
+            content: '←';
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--ice);
+            letter-spacing: -0.02em;
+        }
+
+        .meta {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .tlp-label {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            background: #000000;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .tlp-red {
+            color: var(--tlp-red);
+            border-color: var(--tlp-red);
+            box-shadow: 0 0 10px rgba(255, 43, 43, 0.3);
+        }
+
+        .tlp-amber {
+            color: var(--tlp-amber);
+            border-color: var(--tlp-amber);
+            box-shadow: 0 0 10px rgba(255, 192, 0, 0.3);
+        }
+
+        .tlp-green {
+            color: var(--tlp-green);
+            border-color: var(--tlp-green);
+            box-shadow: 0 0 10px rgba(51, 255, 0, 0.3);
+        }
+
+        .tlp-clear {
+            color: var(--tlp-clear);
+            border-color: var(--tlp-clear);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .date {
+            color: rgba(232, 244, 248, 0.5);
+            font-size: 0.85rem;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            background: rgba(167, 139, 250, 0.1);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            color: var(--purple);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .content {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: rgba(232, 244, 248, 0.85);
+        }
+
+        .content h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--electric);
+            letter-spacing: -0.02em;
+        }
+
+        .content h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 0.8rem;
+            color: var(--electric);
+        }
+
+        .content p {
+            margin-bottom: 1.2rem;
+        }
+
+        .content ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .content code {
+            background: rgba(0, 217, 255, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--electric);
+            font-size: 0.9em;
+        }
+
+        .highlight-box {
+            background: rgba(255, 192, 0, 0.1);
+            border-left: 3px solid var(--amber);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .pipeline-stages {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            justify-content: space-between;
+        }
+
+        .stage {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            padding: 1.5rem;
+            text-align: center;
+            flex: 1;  /* Makes all stages equal width */
+        }
+
+        .stage-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            color: var(--electric);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stage-label {
+            font-size: 0.85rem;
+            color: rgba(232, 244, 248, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .repo-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(167, 139, 250, 0.1);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            padding: 0.8rem 1.5rem;
+            color: var(--purple);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+            margin: 2rem 0;
+        }
+
+        .repo-link:hover {
+            background: rgba(167, 139, 250, 0.2);
+            border-color: var(--purple);
+            gap: 0.8rem;
+        }
+
+        .repo-link::before {
+            content: '→';
+        }
+
+        strong,
+        b {
+            color: var(--electric);
+            font-weight: 600;
+        }
+
+        .tech-stack {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tech-item {
+            color: var(--electric);
+            font-weight: 600;
+        }
+
+        .tech-separator {
+            color: rgba(232, 244, 248, 0.4);
+            font-weight: 400;
+        }
+
+        .content ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .content li::marker {
+            color: var(--electric);
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .content h2 {
+                font-size: 1.5rem;
+            }
+
+            .pipeline-stages {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">Back to Archive</a>
+        
+        <header>
+            <h1>CI/CD Automation for SIEM Applications</h1>
+            <div class="meta">
+                <span class="tlp-label tlp-badge">TLP:CLEAR</span>
+                <span class="date">April 2025</span>
+                <div class="tags">
+                    <span class="tag">CI/CD</span>
+                    <span class="tag">SIEM Engineering</span>
+                    <span class="tag">Automation</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+            <h2>Executive Summary</h2>
+            <p>
+                Engineered a fully automated CI/CD pipeline for SIEM application development using GitLab CI, 
+                eliminating manual build processes and ensuring consistent quality gates. The solution automates 
+                app packaging, validation, testing, and release management—transforming a manual, error-prone 
+                workflow into a reliable, repeatable deployment pipeline.
+            </p>
+
+            <div class="highlight-box">
+                <p><strong>Key Achievement:</strong> Implemented detection-as-code practices for SIEM content 
+                by treating security applications as software artifacts with full CI/CD lifecycle management, 
+                automated testing, and quality validation.</p>
+            </div>
+
+            <h2>Business Problem</h2>
+            <p>
+                SIEM application development and deployment faced several operational challenges:
+            </p>
+            <ul>
+                <li>Manual packaging and validation processes were time-consuming and error-prone</li>
+                <li>No automated quality checks before deployment to production SIEM environments</li>
+                <li>Inconsistent application versioning and release management</li>
+                <li>Lack of automated testing against multiple SIEM platform versions</li>
+                <li>Difficult to ensure compliance with platform-specific standards (e.g., Splunk AppInspect)</li>
+            </ul>
+            <p>
+                The team needed a way to enforce quality gates, automate repetitive tasks, and ensure 
+                every SIEM application met organizational standards before deployment.
+            </p>
+
+            <h2>Technical Solution</h2>
+
+            <h3>CI/CD Pipeline Architecture</h3>
+            <p>
+                Built a multi-stage GitLab CI pipeline that automates the entire application lifecycle:
+            </p>
+
+            <div class="pipeline-stages">
+                <div class="stage">
+                    <div class="stage-number">1</div>
+                    <div class="stage-label">Build & Package</div>
+                </div>
+                <div class="stage">
+                    <div class="stage-number">2</div>
+                    <div class="stage-label">Validate Quality</div>
+                </div>
+                <div class="stage">
+                    <div class="stage-number">3</div>
+                    <div class="stage-label">Run Tests</div>
+                </div>
+                <div class="stage">
+                    <div class="stage-number">4</div>
+                    <div class="stage-label">Create Release</div>
+                </div>
+            </div>
+
+            <h3>Stage 1: Automated Build & Packaging</h3>
+            <p>
+                Leveraged platform frameworks (e.g., Splunk UCC) to generate standardized application 
+                structures and package them into deployment-ready artifacts. The pipeline:
+            </p>
+            <ul>
+                <li>Automatically generates application scaffolding with proper directory structure</li>
+                <li>Injects version numbers from Git tags to ensure traceability</li>
+                <li>Creates compressed archives (<code>.tar.gz</code>) ready for deployment</li>
+                <li>Stores artifacts for downstream stages</li>
+            </ul>
+
+            <h3>Stage 2: Quality Validation</h3>
+            <p>
+                Integrated automated validation tools to enforce platform compliance:
+            </p>
+            <ul>
+                <li><strong>AppInspect CLI:</strong> Validates applications against platform-specific 
+                standards (configuration files, permissions, best practices)</li>
+                <li><strong>Automated Reporting:</strong> Generates detailed reports of successes, 
+                warnings, and failures</li>
+                <li><strong>Quality Gates:</strong> Pipeline fails if critical validation checks don't pass</li>
+            </ul>
+
+            <h3>Stage 3: Automated Testing</h3>
+            <p>
+                Implemented containerized testing against multiple SIEM platform versions:
+            </p>
+            <ul>
+                <li>Spins up isolated SIEM instances in Docker containers</li>
+                <li>Automatically installs the application being tested</li>
+                <li>Generates test credentials (e.g., HEC tokens) programmatically</li>
+                <li>Runs functional tests to verify application behavior</li>
+                <li>Tests against multiple platform versions to ensure compatibility</li>
+            </ul>
+
+            <h3>Stage 4: Release Management</h3>
+            <p>
+                Automated release creation triggered by Git tags:
+            </p>
+            <ul>
+                <li>Creates formal releases in GitLab with versioned artifacts</li>
+                <li>Associates deployment packages with specific code versions</li>
+                <li>Provides download links for production deployment</li>
+                <li>Maintains release history and change tracking</li>
+            </ul>
+
+            <h2>Implementation Details</h2>
+
+            <h3>Version Management Strategy</h3>
+            <p>
+                Implemented semantic versioning synchronized with Git tags. The pipeline automatically:
+            </p>
+            <ul>
+                <li>Extracts version numbers from Git tags (e.g., <code>v1.2.3</code>)</li>
+                <li>Updates application manifests with correct version numbers</li>
+                <li>Ensures package filenames match version tags for traceability</li>
+            </ul>
+
+            <h3>Testing Infrastructure</h3>
+            <p>
+                Created reusable bash scripts that:
+            </p>
+            <ul>
+                <li>Set up ephemeral SIEM environments</li>
+                <li>Install applications under test</li>
+                <li>Configure test data and credentials</li>
+                <li>Execute validation checks</li>
+                <li>Clean up resources after tests complete</li>
+            </ul>
+
+            <h2>Business Impact</h2>
+            <ul>
+                <li><strong>Reduced Deployment Time:</strong> Manual build/test cycles taking hours reduced 
+                to automated runs in minutes</li>
+                <li><strong>Improved Quality:</strong> Automated validation catches issues before production 
+                deployment</li>
+                <li><strong>Consistency:</strong> Every application follows the same quality gates and 
+                testing procedures</li>
+                <li><strong>Traceability:</strong> Clear versioning and release history for audit and 
+                rollback purposes</li>
+                <li><strong>Developer Velocity:</strong> Engineers focus on detection logic instead of 
+                manual packaging and testing</li>
+            </ul>
+
+            <h2>Tech Stack</h2>
+            <div class="tech-stack">
+                <span class="tech-item">GitLab CI</span>
+                <span class="tech-separator">•</span>
+                <span class="tech-item">Docker</span>
+                <span class="tech-separator">•</span>
+                <span class="tech-item">Bash</span>
+                <span class="tech-separator">•</span>
+                <span class="tech-item">Splunk UCC</span>
+                <span class="tech-separator">•</span>
+                <span class="tech-item">AppInspect CLI</span>
+                <span class="tech-separator">•</span>
+                <span class="tech-item">Semantic Versioning</span>
+                <span class="tech-separator">•</span>
+                <span class="tech-item">DevSecOps</span>
+            </div>
+
+            <div class="highlight-box">
+                <p><strong>Key Takeaway:</strong> This project demonstrates how bringing CI/CD and DevOps principles into security tooling transforms manual operations into repeatable, enterprise-grade engineering workflows.</p>
+            </div>
+
+            <h2>Future Enhancements</h2>
+            <p>
+                Potential improvements identified during development:
+            </p>
+            <ul>
+                <li>Implement automated rollback on failed deployments</li>
+                <li>Add security scanning for application dependencies</li>
+
+            </ul>
+
+            <a href="https://github.com/code2319/code2319.github.io/projects/details/ci-cd-automation-for-siem-applications.md" class="repo-link" _target="_blank">
+                View Technical Details
+            </a>
+        </div>
+    </div>
+</body>
+</html>

@@ -652,6 +652,28 @@
                 <!-- Add more projects here when you have them -->
                 <!-- Example: Copy a project-card from above and paste here -->
                 
+                <article class="project-card">
+                    <div class="project-header">
+                        <div>
+                            <!-- <div class="project-id"></div> -->
+                            <h2 class="project-title">CI/CD Automation for SIEM Applications</h2>
+                        </div>
+                        <span class="tlp-label tlp-clear">TLP:CLEAR</span>
+                    </div>
+                    <p class="project-description">
+                        Built a fully automated CI/CD pipeline for SIEM applications delivery. Eliminated manual packaging and testing , reduced deployment time from hours to minutes.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">CI/CD</span>
+                        <span class="tag">SIEM Engineering</span>
+                        <span class="tag">Automation</span>
+                    </div>
+                    <div class="project-footer">
+                        <a href="projects/ci-cd-automation-for-siem-applications.html" class="project-link" target="_blank">Details</a>
+                        <span class="project-date">2025.04</span>
+                    </div>
+                </article>
+
             </div>
         </div>
 
@@ -665,51 +687,68 @@
     </div>
     
     <script>
-    document.addEventListener('DOMContentLoaded', function() {        
-        // Update "Show More" button with additional project count
-        const showMoreBtn = document.getElementById('showMoreBtn');
-        if (additionalProjects.length > 0) {
-            showMoreBtn.textContent = `Show More Projects (${additionalProjects.length})`;
-            showMoreBtn.style.display = 'inline-block';
-        } else {
-            showMoreBtn.style.display = 'none';
-        }
-        
-        // Get last update date from most recent project
-        const allProjectDates = document.querySelectorAll('.project-date');
-        let latestDate = '2024.01.01';
-        
-        allProjectDates.forEach(dateEl => {
-            const dateText = dateEl.textContent.trim();
-            if (dateText > latestDate) {
-                latestDate = dateText;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Count main projects (only the first projects-grid, not the one inside additionalProjects)
+            const mainProjectsGrid = document.querySelector('.projects-grid');
+            const mainProjects = mainProjectsGrid.querySelectorAll('.project-card');
+            
+            // Count additional (hidden) projects - THIS WAS MISSING
+            const additionalProjects = document.querySelectorAll('#additionalProjects .project-card');
+            
+            // Auto-number all projects
+            const allProjectCards = document.querySelectorAll('.project-card');
+            allProjectCards.forEach((card, index) => {
+                const projectId = card.querySelector('.project-id');
+                if (projectId) {
+                    const projectNumber = String(index + 1).padStart(3, '0');
+                    projectId.textContent = `PROJECT-${projectNumber}`;
+                }
+            });
+    
+            // Update "Show More" button with additional project count
+            const showMoreBtn = document.getElementById('showMoreBtn');
+            if (additionalProjects.length > 0) {
+                showMoreBtn.textContent = `Show More Projects (${additionalProjects.length})`;
+                showMoreBtn.style.display = 'inline-block';
+            } else {
+                showMoreBtn.style.display = 'none';
             }
-        });
-        
-        // Update status bar with latest date (only 1 status-item now)
-        const statusItems = document.querySelectorAll('.status-item');
-        if (statusItems.length >= 1) {
-            const dateSpan = statusItems[0].querySelector('span');
-            if (dateSpan) {
-                dateSpan.textContent = `LAST UPDATE: ${latestDate}`;
+    
+            // Get last update date from most recent project
+            const allProjectDates = document.querySelectorAll('.project-date');
+            let latestDate = '2024.01.01';
+            
+            allProjectDates.forEach(dateEl => {
+                const dateText = dateEl.textContent.trim();
+                if (dateText > latestDate) {
+                    latestDate = dateText;
+                }
+            });
+    
+            // Update status bar with latest date
+            const statusItems = document.querySelectorAll('.status-item');
+            if (statusItems.length >= 1) {
+                const dateSpan = statusItems[0].querySelector('span');
+                if (dateSpan) {
+                    dateSpan.textContent = `LAST UPDATE: ${latestDate}`;
+                }
             }
-        }
         });
 
-    function toggleProjects() {
-        const additionalProjects = document.getElementById('additionalProjects');
-        const btn = document.getElementById('showMoreBtn');
-        const additionalProjectCount = document.querySelectorAll('#additionalProjects .project-card').length;
-        
-        additionalProjects.classList.toggle('expanded');
-        btn.classList.toggle('expanded');
-        
-        if (additionalProjects.classList.contains('expanded')) {
-            btn.textContent = 'Show Less';
-        } else {
-            btn.textContent = `Show More Projects (${additionalProjectCount})`;
+        function toggleProjects() {
+            const additionalProjects = document.getElementById('additionalProjects');
+            const btn = document.getElementById('showMoreBtn');
+            const additionalProjectCount = document.querySelectorAll('#additionalProjects .project-card').length;
+            
+            additionalProjects.classList.toggle('expanded');
+            btn.classList.toggle('expanded');
+            
+            if (additionalProjects.classList.contains('expanded')) {
+                btn.textContent = 'Show Less';
+            } else {
+                btn.textContent = `Show More Projects (${additionalProjectCount})`;
+            }
         }
-    }
     </script>
 
 </body>
