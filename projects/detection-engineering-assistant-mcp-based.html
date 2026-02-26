@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detection Engineering Assistant (MCP-Based) - Project Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-blue: #0a0e27;
+            --slate: #1a1f3a;
+            --electric: #00d9ff;
+            --amber: #ffb627;
+            --ice: #e8f4f8;
+            --purple: #a78bfa;
+            --tlp-amber: #FFC000;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--deep-blue);
+            color: var(--ice);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(180deg, transparent 0%, var(--slate) 50%, transparent 100%);
+            background-size: 100% 200px;
+            animation: scan 8s linear infinite;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(0, 217, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(167, 139, 250, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .back-link {
+            color: var(--electric);
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .back-link:hover {
+            gap: 0.8rem;
+            color: var(--ice);
+        }
+
+        .back-link::before {
+            content: '←';
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--ice);
+            letter-spacing: -0.02em;
+        }
+
+        .meta {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .tlp-label {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            background: #000000;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .tlp-amber {
+            color: var(--tlp-amber);
+            border-color: var(--tlp-amber);
+            box-shadow: 0 0 10px rgba(255, 192, 0, 0.3);
+        }
+
+        .date {
+            color: rgba(232, 244, 248, 0.5);
+            font-size: 0.85rem;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            background: rgba(167, 139, 250, 0.1);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            color: var(--purple);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .content {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: rgba(232, 244, 248, 0.85);
+        }
+
+        .content h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--electric);
+            letter-spacing: -0.02em;
+        }
+
+        .content h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 0.8rem;
+            color: var(--electric);
+        }
+
+        .content p {
+            margin-bottom: 1.2rem;
+        }
+
+        .content ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .content li::marker {
+            color: var(--electric);
+        }
+
+        .content code {
+            background: rgba(0, 217, 255, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--electric);
+            font-size: 0.9em;
+        }
+
+        .content strong,
+        .content b {
+            color: var(--electric);
+            font-weight: 600;
+        }
+
+        .highlight-box {
+            background: rgba(255, 192, 0, 0.1);
+            border-left: 3px solid var(--amber);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .architecture-flow {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--electric);
+        }
+
+        .flow-arrow {
+            color: rgba(232, 244, 248, 0.4);
+            margin: 0 0.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            color: var(--electric);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: rgba(232, 244, 248, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* .tech-stack {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
+        } */
+
+        .tech-item {
+            color: var(--electric);
+            font-weight: 600;
+        }
+
+        .tech-separator {
+            color: rgba(232, 244, 248, 0.4);
+            font-weight: 400;
+        }
+
+        .validation-steps {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .validation-steps ol {
+            margin-left: 1.5rem;
+        }
+
+        .validation-steps li {
+            margin-bottom: 0.8rem;
+            color: rgba(232, 244, 248, 0.85);
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .content h2 {
+                font-size: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">Back to Archive</a>
+        
+        <header>
+            <h1>Detection Engineering Assistant (MCP-Based)</h1>
+            <div class="meta">
+                <span class="tlp-label tlp-amber">TLP:AMBER</span>
+                <span class="date">February 2026</span>
+                <div class="tags">
+                    <span class="tag">MCP</span>
+                    <span class="tag">LLM Integration</span>
+                    <span class="tag">Detection Engineering</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+            <h2>Executive Summary</h2>
+            <p>
+                Designed and implemented an MCP server that indexes internal detections as code and enriches them with 7,000+ public rules for context — enabling automated MITRE coverage analysis, detection gap identification, and production-ready SPL/KQL generation to support our detection engineering lifecycle.
+            </p>
+
+            <p>
+            Public detections provide benchmarking and contextual intelligence. Internal detections remain authoritative
+            and prioritized in all coverage analysis and recommendations.
+            </p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">7,000+</div>
+                    <div class="stat-label">Public Detections Indexed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Detection Platforms</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">80+</div>
+                    <div class="stat-label">MCP Tools Exposed</div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <p><strong>Key Achievement:</strong> Validated end-to-end workflow by generating a production-ready SIEM detection query through natural language interaction with Claude Desktop. Additionally, submitted a full vendor-style threat intelligence report and successfully received actionable detection recommendations generated through the MCP platform.</p>
+            </div>
+
+            <h2>The Problem</h2>
+            <p>
+                Detection engineering requires constant cross-referencing across multiple rule libraries, MITRE ATT&CK mapping, and time-consuming gap analysis. The knowledge landscape is fragmented:
+            </p>
+            <ul>
+                <li>Internal detections live inside SIEM in proprietary formats</li>
+                <li>Sigma rules maintained in one repository with one schema</li>
+                <li>Splunk ESCU detections use different metadata structures</li>
+                <li>Elastic Security and Sentinel have their own formats</li>
+                <li>No unified way to query "show me all T1550 detections across platforms"</li>
+                <li>MITRE coverage analysis requires manual spreadsheet tracking</li>
+                <li>LLMs cannot effectively reason about thousands of detection rules without structured access</li>
+            </ul>
+            <p>
+                Traditional approaches involve manually browsing GitHub repositories, searching documentation, 
+                and cobbling together analysis in spreadsheets—a workflow that doesn't scale.
+            </p>
+
+            <h2>Technical Solution</h2>
+
+            <h3>Architecture Overview</h3>
+            <div class="architecture-flow">
+                Detection Sources <span class="flow-arrow">→</span> 
+                Parser Layer <span class="flow-arrow">→</span> 
+                Normalized Schema <span class="flow-arrow">→</span> 
+                SQLite (FTS5) <span class="flow-arrow">→</span> 
+                MCP Tool Registry <span class="flow-arrow">→</span>
+                LLM
+            </div>
+
+            <h3>Data Ingestion & Normalization</h3>
+            <p>
+                Built parsers for each detection source that extract and normalize:
+            </p>
+            <ul>
+                <li><strong>Core Metadata:</strong> Name, description, severity, detection type</li>
+                <li><strong>MITRE Mapping:</strong> Technique IDs, tactics, sub-techniques</li>
+                <li><strong>Platform Context:</strong> Data sources, log types, query language</li>
+                <li><strong>Vulnerability Links:</strong> CVE mappings where applicable</li>
+                <li><strong>Query Logic:</strong> Detection queries in native platform languages</li>
+            </ul>
+            <p>
+                All detections stored in SQLite with FTS5 (full-text search) indexing, enabling:
+            </p>
+            <ul>
+                <li>Fast text search across names, descriptions, and queries</li>
+                <li>Efficient filtering by MITRE technique, tactic, severity</li>
+                <li>Cross-platform comparison queries</li>
+                <li>Pattern extraction for similar detection logic</li>
+            </ul>
+
+            <h3>MCP Tool Design</h3>
+            <p>
+                Exposed 80+ specialized tools through MCP interface, organized by capability:
+            </p>
+            <ul>
+                <li><strong>Search & Discovery:</strong> Full-text search, filtering by metadata, source-specific queries</li>
+                <li><strong>MITRE Analysis:</strong> Coverage mapping, gap identification, technique-level aggregation</li>
+                <li><strong>Cross-Platform Comparison:</strong> Compare detection coverage between Sigma/Splunk/Elastic/Sentinel</li>
+                <li><strong>Pattern Extraction:</strong> Identify common query structures, field usage, detection approaches</li>
+                <li><strong>Template Generation:</strong> Generate detection scaffolding based on learned patterns</li>
+                <li><strong>Knowledge Graph:</strong> Store analytical decisions, learnings, and reasoning for context retention</li>
+            </ul>
+
+            <h3>Key Architectural Decisions</h3>
+            <ul>
+                <li><strong>Separation of Concerns:</strong> Strict boundaries between persistence (SQLite), business logic (analysis tools), and orchestration (LLM workflows)</li>
+                <li><strong>Incremental Indexing:</strong> Idempotent indexing on startup allows safe re-runs and updates</li>
+                <li><strong>Tool Granularity:</strong> Balanced lightweight search tools vs. heavy aggregation to optimize LLM context consumption</li>
+                <li><strong>FTS5 for Performance:</strong> Full-text search enables sub-second queries across 7,000+ rules</li>
+                <li><strong>Knowledge Persistence:</strong> Built-in graph layer stores past analyses and decisions for improved reasoning</li>
+            </ul>
+
+            <h2>Real-World Validation</h2>
+            <p>
+                Tested the system end-to-end to validate production viability:
+            </p>
+
+            <div class="validation-steps">
+                <ol>
+                    <li>Connected MCP server to Claude Desktop on macOS</li>
+                    <li>Requested MITRE coverage gap analysis on indexed detections</li>
+                    <li>Asked assistant to identify missing coverage for technique T1550 (Use Alternate Authentication Material)</li>
+                    <li>Requested generation of a Splunk SPL detection query for the gap</li>
+                    <li>Received production-ready query with proper data model usage and field references</li>
+                    <li>Submitted vendor-style detection report and received actionable recommendations</li>
+                    <li>Query executed successfully in production SIEM, returning expected results</li>
+                </ol>
+            </div>
+
+            <p><strong>This validation proved:</strong></p>
+            <ul>
+                <li>The indexing model is usable by LLMs for complex reasoning</li>
+                <li>Detection pattern extraction works accurately across platforms</li>
+                <li>MITRE mapping is reliable and queryable</li>
+                <li>Query generation produces near-production-ready output</li>
+                <li>The entire workflow—from gap analysis to working detection—can be LLM-assisted</li>
+            </ul>
+
+            <h2>Why This Matters</h2>
+            <p>
+                This project demonstrates a fundamentally different approach to detection engineering—one 
+                that treats detections as queryable intelligence rather than scattered files. By making 
+                this knowledge LLM-accessible through MCP, complex analytical workflows become natural 
+                language interactions.
+            </p>
+
+            <div class="highlight-box">
+                <p><strong>Strategic Value:</strong> This isn't just "I wrote some SPL rules." This is 
+                systems thinking applied to detection engineering—data modeling, AI integration, platform 
+                design, and production-oriented architecture. It positions detection engineering as a 
+                measurable, AI-assisted discipline rather than artisanal craftsmanship.</p>
+            </div>
+
+            <h2>Tech Stack</h2>
+            <div class="architecture-flow">
+                <span class="tech-item">Typescript</span>
+                <span class="tech-separator">•</span>
+                <span class="tech-item">Model Context Protocol</span>
+                <span class="tech-separator">•</span>
+                <span class="tech-item">SQLite</span>
+                <span class="tech-separator">•</span>
+                <span class="tech-item">FTS5</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
