@@ -378,6 +378,104 @@
                 <li><strong>Low False Positives:</strong> 94% precision ensures legitimate users are rarely impacted</li>
             </ul>
 
+            <h2>Evolution: From Email Strings to Account Behaviour</h2>
+            <p>
+                The email classifier reads a single artefact — the address string. Its natural next
+                generation reads what an account <em>does</em>: a behavioural model that scores each
+                account from the signals it emits across its early lifecycle — from signup, to first
+                visit, to first product action, and beyond. Same core idea (learn the patterns that
+                separate automated abuse from genuine users), applied to behaviour instead of text.
+            </p>
+            <p>
+                The behavioural model is deliberately small in production and draws from a much larger
+                catalogue of candidate signals. Both are listed below, described generically.
+            </p>
+
+            <h3>Production Feature Set (Current)</h3>
+            <p>The signals the live behavioural model scores on today:</p>
+            <ul>
+                <li><strong>Payment intent</strong> — genuine paid customer vs. free/trial entry</li>
+                <li><strong>Signup method</strong> — the acquisition / registration channel used</li>
+                <li><strong>Time to first visit</strong> — how long after signup the account first returns</li>
+                <li><strong>Returned-after-signup flag</strong> — whether it ever came back at all</li>
+                <li><strong>Shared-device cluster size</strong> — how many accounts share the account's device</li>
+                <li><strong>Single-operator band flag</strong> — device cluster in the mid-range typical of one operator running many accounts</li>
+                <li><strong>Time to first product action</strong> — how quickly the account starts using the product</li>
+                <li><strong>Product-activity flag</strong> — whether the account used the product at all</li>
+                <li><strong>Data-extraction flag</strong> — any export / bulk-pull activity</li>
+                <li><strong>Extraction-to-usage ratio</strong> — how much it pulls relative to normal use ("harvest without creating")</li>
+            </ul>
+
+            <h3>Full Feature Catalogue (Candidate Signals)</h3>
+            <p>
+                The broader signal space explored during research, grouped by lifecycle stage. Only the
+                subset above is in production; the rest are candidates for future iterations.
+            </p>
+            <p><strong>Signup (time zero)</strong></p>
+            <ul>
+                <li>Payment intent (paid vs. free/trial)</li>
+                <li>Acquisition channel / signup source</li>
+                <li>Marketing channel</li>
+                <li>Selected plan tier</li>
+                <li>Email domain age</li>
+                <li>Email reputation score (third-party)</li>
+                <li>Email-string statistics — entropy, length, digit runs, look-alike top-level domains</li>
+            </ul>
+            <p><strong>First visit &amp; device</strong></p>
+            <ul>
+                <li>Time from signup to first visit</li>
+                <li>Returned-after-signup flag</li>
+                <li>All-time shared-device cluster size</li>
+                <li>Single-operator band flag (mid-range cluster)</li>
+                <li>Large-cluster flag (shared network / proxy noise)</li>
+                <li>Same-day device fan-out — distinct accounts seen on one device in a single day</li>
+                <li>Bot-challenge / CAPTCHA session-risk score (third-party)</li>
+                <li>Device-fingerprint cross-account clustering (third-party)</li>
+            </ul>
+            <p><strong>First product action</strong></p>
+            <ul>
+                <li>Time from signup to first product action</li>
+                <li>Product-action flag</li>
+                <li>Time from first visit to first action</li>
+                <li>Delayed-activation band flag</li>
+                <li>Instant-action flag (near-zero delay)</li>
+            </ul>
+            <p><strong>Early behaviour</strong></p>
+            <ul>
+                <li>Active span (first to last action)</li>
+                <li>Distinct actions / items</li>
+                <li>Distinct categories used</li>
+                <li>Early action volume</li>
+                <li>Night-time activity fraction</li>
+                <li>Distinct locales</li>
+                <li>Average response time</li>
+                <li>Action-uniqueness ratio (distinct ÷ total)</li>
+                <li>Distinct user-agents</li>
+                <li>Actions per active hour</li>
+                <li>Request-text sequence score (character-pattern model)</li>
+            </ul>
+            <p><strong>Extraction</strong></p>
+            <ul>
+                <li>Time to first export</li>
+                <li>Export-reached flag</li>
+                <li>Export-to-activity ratio</li>
+            </ul>
+            <p><strong>Monetisation &amp; order</strong></p>
+            <ul>
+                <li>Saw-paywall flag</li>
+                <li>Time to paywall</li>
+                <li>Purchased flag</li>
+                <li>Time to purchase</li>
+                <li>Shared payment-card fan-out (accounts per card)</li>
+                <li>Invoice discount amount</li>
+                <li>Third-party payment-fraud vendor score and reason code</li>
+            </ul>
+            <p><strong>Cross-stage / composite</strong></p>
+            <ul>
+                <li>Unsupervised anomaly score (isolation-forest style)</li>
+                <li>Conjunction rule — delayed activation &times; engaged &times; single-operator cluster</li>
+            </ul>
+
             <h2>Technical Skills Demonstrated</h2>
             <ul>
                 <li>End-to-end ML pipeline development (data collection, feature engineering, training, deployment)</li>
