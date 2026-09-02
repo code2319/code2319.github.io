@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Assisted Fraud Review - Project Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-blue: #0a0e27;
+            --slate: #1a1f3a;
+            --electric: #00d9ff;
+            --amber: #ffb627;
+            --ice: #e8f4f8;
+            --purple: #a78bfa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--deep-blue);
+            color: var(--ice);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(180deg, transparent 0%, var(--slate) 50%, transparent 100%);
+            background-size: 100% 200px;
+            animation: scan 8s linear infinite;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(0, 217, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(167, 139, 250, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .back-link {
+            color: var(--electric);
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .back-link:hover {
+            gap: 0.8rem;
+            color: var(--ice);
+        }
+
+        .back-link::before {
+            content: '←';
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--ice);
+            letter-spacing: -0.02em;
+        }
+
+        .meta {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .tlp-badge {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            background: #000000;
+            border: 1px solid #FFC000;
+            color: #FFC000;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        .date {
+            color: rgba(232, 244, 248, 0.5);
+            font-size: 0.85rem;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            background: rgba(167, 139, 250, 0.1);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            color: var(--purple);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .content {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: rgba(232, 244, 248, 0.85);
+        }
+
+        .content h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--electric);
+            letter-spacing: -0.02em;
+        }
+
+        .content h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 0.8rem;
+            color: var(--electric);
+        }
+
+        .content p {
+            margin-bottom: 1.2rem;
+        }
+
+        .content ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .content code {
+            background: rgba(0, 217, 255, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--electric);
+            font-size: 0.9em;
+        }
+
+        .highlight-box {
+            background: rgba(255, 192, 0, 0.1);
+            border-left: 3px solid var(--amber);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            color: var(--electric);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: rgba(232, 244, 248, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .content h2 {
+                font-size: 1.5rem;
+            }
+
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">Back to Archive</a>
+
+        <header>
+            <h1>AI-Assisted Fraud Review</h1>
+            <div class="meta">
+                <span class="tlp-badge">TLP:AMBER</span>
+                <span class="date">August 2026</span>
+                <div class="tags">
+                    <span class="tag">Anti Fraud</span>
+                    <span class="tag">LLM</span>
+                    <span class="tag">Kubernetes</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+            <p>
+                An analyst reviewing a blocked signup answers one question — <em>is this fraud?</em>
+                — and the evidence lives in about a dozen places. Identity, billing, domain
+                reputation, the rules that fired, related accounts, payment attempts. Every review
+                meant opening five systems and rebuilding the same picture by hand.
+            </p>
+            <p>
+                So: a scheduled job every fifteen minutes. Read the queue, decide who needs a look,
+                pull every source into one report, ask a model for a verdict, write down that the
+                run happened. The verdict is advisory — nothing here blocks or approves an account.
+                A human still decides.
+            </p>
+
+            <h2>$1.43 a user, and none of the obvious fixes worked</h2>
+            <p>
+                The activity data is the expensive part. One review scanned 234 GiB of warehouse
+                data and cost <strong>$1.43</strong> — against an analyst cost of roughly $0.50 a
+                case, which makes the assistant worse than the problem.
+            </p>
+            <p>
+                The obvious fixes don't work. Asking for less data, or asking for one specific
+                user, both bill exactly the same — the way these tables are laid out, a query for
+                one person reads everything anyway.
+            </p>
+
+            <div class="highlight-box">
+                <p>Once you know the scan is fixed, the answer inverts. If one user costs the same
+                as twenty-five, stop querying per user. One batched query per cycle is
+                byte-identical at every batch size — so the cost just divides.</p>
+            </div>
+
+            <p>
+                <strong>$1.43 at batch 1, $0.286 at 5, $0.057 at 25.</strong> Measured by dry run,
+                not estimated — on-demand BigQuery bills bytes processed, so a dry run <em>is</em>
+                the invoice. A floor of five users means a thin cycle issues no job at all rather
+                than paying $1.43 to review one person.
+            </p>
+            <p>
+                The neat part is what it doesn't touch. The query runs once per cycle before the
+                fan-out, so concurrency moves the bill by exactly zero, and the whole fix needed no
+                upstream team and no re-clustered copy of a 270 GiB table.
+            </p>
+
+            <h2>The metric that lied</h2>
+            <p>
+                A subtler one. Each run writes a log at the end, and that log is both the only
+                record the run happened and the denominator of the coverage metric. Runs have a
+                hard kill deadline. A killed run writes no log, so its cases never enter the total,
+                so coverage goes <strong>up</strong>. The worse it performed, the healthier the
+                dashboard looked.
+            </p>
+            <p>
+                Now a stopwatch checks whether there's time to finish one more account before
+                starting it, and marks the rest deferred if not. Deferring is recorded honestly and
+                self-corrects — the next run picks them up fifteen minutes later. It stops
+                <em>new</em> work only; reports are write-once, and killing one halfway strands an
+                orphaned file that nothing explains, since a retry gets a new ID and can't
+                overwrite it.
+            </p>
+
+            <h2>One more, same instinct</h2>
+            <p>
+                <strong>Unknown is not false.</strong> A source that fails returns "unknown", and a
+                source that's switched off records "not collected" — never empty. Collapse those
+                and you've told the model a real person has no activity, which is a confidently
+                wrong claim, or turned a broken integration into evidence of innocence.
+            </p>
+            <p>
+                All three are the same lesson: the failures worth engineering against are the ones
+                that look like success.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

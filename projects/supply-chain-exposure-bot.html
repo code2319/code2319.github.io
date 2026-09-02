@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply Chain Exposure Bot - Project Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-blue: #0a0e27;
+            --slate: #1a1f3a;
+            --electric: #00d9ff;
+            --amber: #ffb627;
+            --ice: #e8f4f8;
+            --purple: #a78bfa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--deep-blue);
+            color: var(--ice);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(180deg, transparent 0%, var(--slate) 50%, transparent 100%);
+            background-size: 100% 200px;
+            animation: scan 8s linear infinite;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(0, 217, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(167, 139, 250, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .back-link {
+            color: var(--electric);
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .back-link:hover {
+            gap: 0.8rem;
+            color: var(--ice);
+        }
+
+        .back-link::before {
+            content: '←';
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--ice);
+            letter-spacing: -0.02em;
+        }
+
+        .meta {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .tlp-badge {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            background: #000000;
+            border: 1px solid #FFC000;
+            color: #FFC000;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        .date {
+            color: rgba(232, 244, 248, 0.5);
+            font-size: 0.85rem;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            background: rgba(167, 139, 250, 0.1);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            color: var(--purple);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .content {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: rgba(232, 244, 248, 0.85);
+        }
+
+        .content h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--electric);
+            letter-spacing: -0.02em;
+        }
+
+        .content h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 0.8rem;
+            color: var(--electric);
+        }
+
+        .content p {
+            margin-bottom: 1.2rem;
+        }
+
+        .content ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .content code {
+            background: rgba(0, 217, 255, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--electric);
+            font-size: 0.9em;
+        }
+
+        .highlight-box {
+            background: rgba(255, 192, 0, 0.1);
+            border-left: 3px solid var(--amber);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            color: var(--electric);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: rgba(232, 244, 248, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .content h2 {
+                font-size: 1.5rem;
+            }
+
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">Back to Archive</a>
+
+        <header>
+            <h1>Supply Chain Exposure Bot</h1>
+            <div class="meta">
+                <span class="tlp-badge">TLP:AMBER</span>
+                <span class="date">May 2026</span>
+                <div class="tags">
+                    <span class="tag">Supply Chain</span>
+                    <span class="tag">Wiz</span>
+                    <span class="tag">Chrome Extensions</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+            <p>
+                A compromised npm package gets disclosed. The only question that matters in the
+                first ten minutes is <em>are we running it?</em> — and answering it used to mean
+                someone opening the cloud security console, writing a query, then doing the same
+                thing again in the code-scanning tool, then reconciling two different answers by
+                hand.
+            </p>
+            <p>
+                This answers it from where the team already works. Ask for a package, get back
+                every workload and repository it appears in.
+            </p>
+
+            <h2>Reverse lookup across two sources</h2>
+            <p>
+                The supply-chain path is the main event. A package and version spec fans out to
+                <strong>Wiz</strong> for the SBOM view — what's actually deployed and running —
+                and to Semgrep for the code view of what's declared in a dependency file. Both run
+                concurrently, because doing them in sequence is just a latency bug.
+            </p>
+            <p>
+                The version matching is where the real work went. An advisory rarely names one
+                exact version: it says <em>below 2.6.6</em>, or gives a range, or a comma-list, or
+                nothing at all. Each of those has to become a query the upstream API actually
+                understands, with inclusive bounds handled correctly — an off-by-one on a range
+                boundary is a package you tell the team you aren't running when you are. Bulk lists
+                arrive as CSV uploads, since a real incident names hundreds of packages, not one.
+            </p>
+
+            <div class="highlight-box">
+                <p>Partial failure degrades, it doesn't hide. One source timing out never suppresses
+                the other's results, and "the service was unavailable" is reported as a different
+                thing from "the package wasn't found" — those mean opposite things to whoever's
+                reading the reply.</p>
+            </div>
+
+            <h2>Three more flows, same shape</h2>
+            <p>
+                The same reverse-lookup idea generalised, so the bot grew:
+            </p>
+            <ul>
+                <li><strong>Chrome extensions</strong> — an extension ID resolves to which managed
+                    devices and user profiles have it installed, via the Chrome Management Reports
+                    API. When a popular extension gets hijacked, this is the exposure question, and
+                    nothing else in the stack answers it.</li>
+                <li><strong>Takedowns</strong> — given an offending URL, it resolves who actually
+                    hosts the content and drafts one notice per host, choosing the DMCA form for
+                    US-registered providers.</li>
+                <li><strong>Indicator enrichment</strong> — a batch of IPs, hashes, or domains
+                    enriched against threat intelligence, one risk line each.</li>
+            </ul>
+            <p>
+                Adding a flow is one new file plus a line in the classifier prompt. Free-form
+                requests get classified by a model, but it never acts on that guess directly — it
+                proposes, the analyst confirms with a button, then the flow runs. Cheap way to keep
+                a misclassification from turning into a wrong answer nobody checked.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

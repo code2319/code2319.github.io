@@ -430,7 +430,7 @@
         }
 
         .additional-projects.expanded {
-            max-height: 3000px;
+            max-height: 12000px;
         }
 
         .additional-projects .project-card {
@@ -443,9 +443,14 @@
             animation: slideUp 0.5s ease forwards;
         }
 
-        .additional-projects.expanded .project-card:nth-child(1) { animation-delay: 0.1s; }
-        .additional-projects.expanded .project-card:nth-child(2) { animation-delay: 0.2s; }
-        .additional-projects.expanded .project-card:nth-child(3) { animation-delay: 0.3s; }
+        .additional-projects.expanded .project-card:nth-child(1) { animation-delay: 0.05s; }
+        .additional-projects.expanded .project-card:nth-child(2) { animation-delay: 0.1s; }
+        .additional-projects.expanded .project-card:nth-child(3) { animation-delay: 0.15s; }
+        .additional-projects.expanded .project-card:nth-child(4) { animation-delay: 0.2s; }
+        .additional-projects.expanded .project-card:nth-child(5) { animation-delay: 0.25s; }
+        .additional-projects.expanded .project-card:nth-child(6) { animation-delay: 0.3s; }
+        .additional-projects.expanded .project-card:nth-child(7) { animation-delay: 0.35s; }
+        .additional-projects.expanded .project-card:nth-child(8) { animation-delay: 0.35s; }
 
         footer {
             text-align: center;
@@ -564,11 +569,76 @@
 
         <div class="status-bar">
             <div class="status-item">
-                <span>LAST UPDATE: 2024.02.16</span>
+                <span>LAST UPDATE: 2026.09</span>
             </div>
         </div>
 
         <div class="projects-grid">
+            <article class="project-card">
+                <div class="project-header">
+                    <div>
+                        <!-- <div class="project-id"></div> -->
+                        <h2 class="project-title">AI-Assisted Fraud Review</h2>
+                    </div>
+                    <span class="tlp-label tlp-amber">TLP:AMBER</span>
+                </div>
+                <p class="project-description">
+                    Collects the context a fraud analyst needs on a signup from a dozen scattered sources into one auditable report, with an advisory LLM verdict. Nothing blocks or approves — a human still decides.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Anti Fraud</span>
+                    <span class="tag">LLM</span>
+                    <span class="tag">Kubernetes</span>
+                </div>
+                <div class="project-footer">
+                    <a href="projects/ai-assisted-fraud-review.html" class="project-link" target="_blank">Details</a>
+                    <span class="project-date">2026.08</span>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header">
+                    <div>
+                        <!-- <div class="project-id"></div> -->
+                        <h2 class="project-title">Threat Exposure Console</h2>
+                    </div>
+                    <span class="tlp-label tlp-amber">TLP:AMBER</span>
+                </div>
+                <p class="project-description">
+                    Reads a supply-chain advisory, extracts every affected package, checks them against our own environment, and prices the triage it replaced. Built in 48 hours.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Threat Intelligence</span>
+                    <span class="tag">LLM</span>
+                    <span class="tag">Supply Chain</span>
+                </div>
+                <div class="project-footer">
+                    <a href="projects/threat-exposure-console.html" class="project-link" target="_blank">Details</a>
+                    <span class="project-date">2026.07</span>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header">
+                    <div>
+                        <!-- <div class="project-id"></div> -->
+                        <h2 class="project-title">Multi-Agent Alert Triage</h2>
+                    </div>
+                    <span class="tlp-label tlp-amber">TLP:AMBER</span>
+                </div>
+                <p class="project-description">
+                    Runbook-driven agent graph that reads a human-written runbook, gathers the evidence it names across SIEM and ticketing, and produces a critiqued triage report. New alert types onboard as Markdown, not code.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Google ADK</span>
+                    <span class="tag">Multi-Agent</span>
+                    <span class="tag">SOC Automation</span>
+                </div>
+                <div class="project-footer">
+                    <a href="projects/multi-agent-alert-triage.html" class="project-link" target="_blank">Details</a>
+                    <span class="project-date">2026.07</span>
+                </div>
+            </article>
 
             <article class="project-card">
                 <div class="project-header">
@@ -588,6 +658,49 @@
                 <div class="project-footer">
                     <a href="projects/ml-classifier-hunting-down-bot-fraud-accounts.html" class="project-link" target="_blank">Details</a>
                     <span class="project-date">2026.07</span>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header">
+                    <div>
+                        <!-- <div class="project-id"></div> -->
+                        <h2 class="project-title">Detections-as-Code for SIEM</h2>
+                    </div>
+                    <span class="tlp-label tlp-amber">TLP:AMBER</span>
+                </div>
+                <p class="project-description">
+                    Exports SIEM detections and dashboards to Git as versioned YAML every night. Content-hash diffing keeps the history real, retired rules are archived rather than vanishing, and each run opens one auto-merging review.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Detection Engineering</span>
+                    <span class="tag">SIEM Engineering</span>
+                </div>
+                <div class="project-footer">
+                    <a href="projects/detections-as-code.html" class="project-link" target="_blank">Details</a>
+                    <span class="project-date">2026.06</span>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header">
+                    <div>
+                        <!-- <div class="project-id"></div> -->
+                        <h2 class="project-title">Supply Chain Exposure Bot</h2>
+                    </div>
+                    <span class="tlp-label tlp-amber">TLP:AMBER</span>
+                </div>
+                <p class="project-description">
+                    Answers "are we running the compromised package?" in seconds — fanning a version spec out to Wiz SBOM and code scanning at once. Also reverse-looks-up Chrome extension installs across managed devices.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Supply Chain</span>
+                    <span class="tag">Wiz</span>
+                    <span class="tag">Chrome Extensions</span>
+                </div>
+                <div class="project-footer">
+                    <a href="projects/supply-chain-exposure-bot.html" class="project-link" target="_blank">Details</a>
+                    <span class="project-date">2026.05</span>
                 </div>
             </article>
 
@@ -638,6 +751,28 @@
                 </div>
             </article>
 
+            <article class="project-card">
+                <div class="project-header">
+                    <div>
+                        <!-- <div class="project-id"></div> -->
+                        <h2 class="project-title">CI/CD Automation for SIEM Applications</h2>
+                    </div>
+                    <span class="tlp-label tlp-clear">TLP:CLEAR</span>
+                </div>
+                <p class="project-description">
+                    Built a fully automated CI/CD pipeline for SIEM applications delivery. Eliminated manual packaging and testing , reduced deployment time from hours to minutes.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">CI/CD</span>
+                    <span class="tag">SIEM Engineering</span>
+                    <span class="tag">Automation</span>
+                </div>
+                <div class="project-footer">
+                    <a href="projects/ci-cd-automation-for-siem-applications.html" class="project-link" target="_blank">Details</a>
+                    <span class="project-date">2025.04</span>
+                </div>
+            </article>
+
         </div>
 
         <!-- Show More Button -->
@@ -649,33 +784,8 @@
 
         <!-- Additional Projects (Hidden by default) -->
         <div class="additional-projects" id="additionalProjects">
-            <div class="projects-grid">
-                <!-- Add more projects here when you have them -->
-                <!-- Example: Copy a project-card from above and paste here -->
-                
-                <article class="project-card">
-                    <div class="project-header">
-                        <div>
-                            <!-- <div class="project-id"></div> -->
-                            <h2 class="project-title">CI/CD Automation for SIEM Applications</h2>
-                        </div>
-                        <span class="tlp-label tlp-clear">TLP:CLEAR</span>
-                    </div>
-                    <p class="project-description">
-                        Built a fully automated CI/CD pipeline for SIEM applications delivery. Eliminated manual packaging and testing , reduced deployment time from hours to minutes.
-                    </p>
-                    <div class="project-tags">
-                        <span class="tag">CI/CD</span>
-                        <span class="tag">SIEM Engineering</span>
-                        <span class="tag">Automation</span>
-                    </div>
-                    <div class="project-footer">
-                        <a href="projects/ci-cd-automation-for-siem-applications.html" class="project-link" target="_blank">Details</a>
-                        <span class="project-date">2025.04</span>
-                    </div>
-                </article>
-
-            </div>
+            <!-- Filled automatically: every project past VISIBLE_COUNT is moved here on load. -->
+            <div class="projects-grid"></div>
         </div>
 
         <footer>
@@ -688,67 +798,64 @@
     </div>
     
     <script>
+        // How many projects stay visible before the fold.
+        const VISIBLE_COUNT = 5;
+
+        // Bump this whenever the site changes.
+        const LAST_UPDATED = '2026.09';
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Count main projects (only the first projects-grid, not the one inside additionalProjects)
-            const mainProjectsGrid = document.querySelector('.projects-grid');
-            const mainProjects = mainProjectsGrid.querySelectorAll('.project-card');
-            
-            // Count additional (hidden) projects - THIS WAS MISSING
-            const additionalProjects = document.querySelectorAll('#additionalProjects .project-card');
-            
-            // Auto-number all projects
-            const allProjectCards = document.querySelectorAll('.project-card');
-            allProjectCards.forEach((card, index) => {
+            const mainGrid = document.querySelector('.projects-grid');
+            const overflowGrid = document.querySelector('#additionalProjects .projects-grid');
+            const showMoreBtn = document.getElementById('showMoreBtn');
+
+            // Newest first, then everything past VISIBLE_COUNT moves into the
+            // collapsed section. The card dates are the timeline — order in the
+            // HTML doesn't matter, and older projects hide themselves.
+            const cardDate = card => card.querySelector('.project-date').textContent.trim();
+            const byNewest = Array.from(mainGrid.querySelectorAll('.project-card'))
+                .sort((a, b) => cardDate(b).localeCompare(cardDate(a)));
+
+            byNewest.forEach((card, index) => {
+                (index < VISIBLE_COUNT ? mainGrid : overflowGrid).appendChild(card);
+            });
+
+            const hiddenCount = overflowGrid.querySelectorAll('.project-card').length;
+
+            // Auto-number every project in display order.
+            document.querySelectorAll('.project-card').forEach((card, index) => {
                 const projectId = card.querySelector('.project-id');
                 if (projectId) {
-                    const projectNumber = String(index + 1).padStart(3, '0');
-                    projectId.textContent = `PROJECT-${projectNumber}`;
+                    projectId.textContent = `PROJECT-${String(index + 1).padStart(3, '0')}`;
                 }
             });
-    
-            // Update "Show More" button with additional project count
-            const showMoreBtn = document.getElementById('showMoreBtn');
-            if (additionalProjects.length > 0) {
-                showMoreBtn.textContent = `Show More Projects (${additionalProjects.length})`;
+
+            if (hiddenCount > 0) {
+                showMoreBtn.textContent = `Show More Projects (${hiddenCount})`;
                 showMoreBtn.style.display = 'inline-block';
             } else {
                 showMoreBtn.style.display = 'none';
             }
-    
-            // Get last update date from most recent project
-            const allProjectDates = document.querySelectorAll('.project-date');
-            let latestDate = '2024.01.01';
-            
-            allProjectDates.forEach(dateEl => {
-                const dateText = dateEl.textContent.trim();
-                if (dateText > latestDate) {
-                    latestDate = dateText;
-                }
-            });
-    
-            // Update status bar with latest date
-            const statusItems = document.querySelectorAll('.status-item');
-            if (statusItems.length >= 1) {
-                const dateSpan = statusItems[0].querySelector('span');
-                if (dateSpan) {
-                    dateSpan.textContent = `LAST UPDATE: ${latestDate}`;
-                }
+
+            // Status bar shows when the site itself was last edited — bump
+            // LAST_UPDATED when you change something. Deliberately not derived
+            // from the project dates or the visitor's clock.
+            const dateSpan = document.querySelector('.status-item span');
+            if (dateSpan) {
+                dateSpan.textContent = `LAST UPDATE: ${LAST_UPDATED}`;
             }
         });
 
         function toggleProjects() {
             const additionalProjects = document.getElementById('additionalProjects');
             const btn = document.getElementById('showMoreBtn');
-            const additionalProjectCount = document.querySelectorAll('#additionalProjects .project-card').length;
-            
+            const hiddenCount = document.querySelectorAll('#additionalProjects .project-card').length;
+
             additionalProjects.classList.toggle('expanded');
             btn.classList.toggle('expanded');
-            
-            if (additionalProjects.classList.contains('expanded')) {
-                btn.textContent = 'Show Less';
-            } else {
-                btn.textContent = `Show More Projects (${additionalProjectCount})`;
-            }
+            btn.textContent = additionalProjects.classList.contains('expanded')
+                ? 'Show Less'
+                : `Show More Projects (${hiddenCount})`;
         }
     </script>
 
