@@ -271,8 +271,8 @@
         <div class="content">
             <p>
                 A compromised npm package gets disclosed. The only question that matters in the
-                first ten minutes is <em>are we running it?</em> — and answering it used to mean
-                someone opening the cloud security console, writing a query, then doing the same
+                first seconds is <em>are we running it?</em> — and answering it used to mean
+                someone opening some security tool, writing a query, then doing the same
                 thing again in the code-scanning tool, then reconciling two different answers by
                 hand.
             </p>
@@ -284,8 +284,8 @@
             <h2>Reverse lookup across two sources</h2>
             <p>
                 The supply-chain path is the main event. A package and version spec fans out to
-                <strong>Wiz</strong> for the SBOM view — what's actually deployed and running —
-                and to Semgrep for the code view of what's declared in a dependency file. Both run
+                <strong>CSPM</strong> for the SBOM view — what's actually deployed and running —
+                and to SAST scanner for the code view of what's declared in a dependency file. Both run
                 concurrently, because doing them in sequence is just a latency bug.
             </p>
             <p>
